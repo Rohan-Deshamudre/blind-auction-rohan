@@ -32,6 +32,43 @@ cd fabric-samples/blind-auction/application
 ```
 npm install
 ```
+Once this is done, the admins for the organisations and the users can be enrolled using the following two commands:
+```
+node setOrgAdmin.js org
+```
+Do this for all organisations. Then register users first starting with the seller:
+```
+node registerUser.js org sellerName
+```
+Do this for all users.
+The next step is creating the auction which can be done by calling:
+```
+node initAuction.js org sellerName auctionName sellingItem
+```
+The auction is now created and status is set to open. This allows for bids to be created using:
+```
+node createBid.js org bidder auctionName price
+```
+As many bids as required can be created by any registered user in any of the organisations in the channel. When this function is called, the enclave is invoked in order to execute the private chaincode of the bids. The information is therefore kept private and encrypted. 
+When a bid is created, the bidID for that is given.
+The bid is then submitted to the ledger using:
+```
+node submitBid.js org bidder auctionName bidID
+```
+Once all the bids are created and submitted, the auction can be closed in order to reveal the bids. The auction is closed using:
+```
+node closeAuction.js org seller auctionName
+```
+The auction can only be closed by the person who started it. The bids are then revealed using:
+```
+node showBid.js org bidder auctionName bidID
+```
+These bids can also be revealed only by the person who submitted the bid. Finally after all the bids are revealed, the winner is evaluated and allows the auction to be closed. 
+The auction cannot be closed until all bids are revealed unless the bid does not change the outcome of the winner.
+The auction is ended using:
+```
+node endAuction.js org seller auctionName
+```
 
 
 
